@@ -4,14 +4,12 @@ public static class ContainerConfig
 {
     public static void ConfigureCommon(this ContainerBuilder builder, IConfiguration configuration)
     {
-        // Add logger
-        builder.ConfigureLogger(configuration);
-
         // Register interfaces with matching classes
         builder.BulkRegister("CoffeeBackup.Common");
     }
 
-    private static void ConfigureLogger(this ContainerBuilder builder, IConfiguration configuration)
+    // Cannot be run by azure functions
+    public static void ConfigureLogger(this ContainerBuilder builder, IConfiguration configuration)
     {
         // Ensure log directory exists
         // Docker should mount this like so:

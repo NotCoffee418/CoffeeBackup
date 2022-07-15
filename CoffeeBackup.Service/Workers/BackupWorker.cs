@@ -9,19 +9,22 @@ public class BackupWorker : BackgroundService
     private readonly IBackupNaming _naming;
     private readonly IConfigAccess _configAccess;
     private readonly IArchiveHandler _archiveHandler;
+    private readonly IBackupHandler _backupHandler;
 
     public BackupWorker(
         ILogger logger,
         IStorageProvider storageProvider,
         IBackupNaming naming,
         IConfigAccess configAccess,
-        IArchiveHandler archiveHandler)
+        IArchiveHandler archiveHandler,
+        IBackupHandler backupHandler)
     {
         _logger = logger;
         _storageProvider = storageProvider;
         _naming = naming;
         _configAccess = configAccess;
         _archiveHandler = archiveHandler;
+        _backupHandler = backupHandler;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -51,25 +54,7 @@ public class BackupWorker : BackgroundService
         string[] allFiles = await _storageProvider.ListFilesAsync();
 
         // Try cleanup old backups if defined in Service
-        int? cleanupAfterDays = _configAccess.CleanupAfterDays();
-        if (cleanupAfterDays is not null)
-        {
-            _logger.Verbose("Cleaning old backups...");
-            DateTime oldBackupTimeBefore = DateTime.UtcNow.AddDays(cleanupAfterDays.Value);// * -1);
-            string[] filesToClean = allFiles
-                .Select(x => (_naming.ExtractTimeFromBackupFileName(x), x))
-                .Where(x => x.Item1 < oldBackupTimeBefore)
-                .Select(x => x.Item2)
-                .ToArray();
-            foreach (string file in filesToClean)
-            {
-                _logger.Information("Removing old backup: {name}");
-                await _storageProvider.RemoveFileAsync(file);
-            }
-            _logger.Verbose("Cleaning old backups complete.");
-        }
-
-
+        await _backupHandler.TryCleanOldBackups(allFiles);
 
         // Determine previous backup time
         _logger.Verbose("Checking to see if new backup is needed...");

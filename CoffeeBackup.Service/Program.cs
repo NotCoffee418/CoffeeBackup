@@ -21,6 +21,7 @@ IHost host = Host.CreateDefaultBuilder(args)
 
         // Register libraries
         builder.ConfigureCommon(configuration);
+        builder.ConfigureLogger(configuration);
         builder.ConfigureLib();
 
         // Register storage providers
