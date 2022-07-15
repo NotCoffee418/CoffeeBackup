@@ -19,9 +19,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "StorageProviders", "StorageProviders", "{DD239158-CDC9-4286-8C0E-8BC9EC2F0827}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoffeeBackup.StorageProviders.Storj", "CoffeeBackup.StorageProviders\CoffeeBackup.StorageProviders.Storj\CoffeeBackup.StorageProviders.Storj.csproj", "{548D350A-DBAC-4374-9ED3-9317CE38F148}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoffeeBackup.StorageProviders.Storj", "CoffeeBackup.StorageProviders\CoffeeBackup.StorageProviders.Storj\CoffeeBackup.StorageProviders.Storj.csproj", "{548D350A-DBAC-4374-9ED3-9317CE38F148}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoffeeBackup.Lib", "CoffeeBackup.Lib\CoffeeBackup.Lib.csproj", "{A1C88473-F4E2-4F55-9042-60D2D86838B9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoffeeBackup.Lib", "CoffeeBackup.Lib\CoffeeBackup.Lib.csproj", "{A1C88473-F4E2-4F55-9042-60D2D86838B9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
