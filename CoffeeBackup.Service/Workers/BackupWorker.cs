@@ -47,10 +47,32 @@ public class BackupWorker : BackgroundService
     /// <returns></returns>
     private async Task CheckAndTryBackupAsync()
     {
-        _logger.Verbose("Checking to see if new backup is needed...");
+        _logger.Verbose("Get existing files in storage");
+        string[] allFiles = await _storageProvider.ListFilesAsync();
+
+        // Try cleanup old backups if defined in Service
+        int? cleanupAfterDays = _configAccess.CleanupAfterDays();
+        if (cleanupAfterDays is not null)
+        {
+            _logger.Verbose("Cleaning old backups...");
+            DateTime oldBackupTimeBefore = DateTime.UtcNow.AddDays(cleanupAfterDays.Value);// * -1);
+            string[] filesToClean = allFiles
+                .Select(x => (_naming.ExtractTimeFromBackupFileName(x), x))
+                .Where(x => x.Item1 < oldBackupTimeBefore)
+                .Select(x => x.Item2)
+                .ToArray();
+            foreach (string file in filesToClean)
+            {
+                _logger.Information("Removing old backup: {name}");
+                await _storageProvider.RemoveFileAsync(file);
+            }
+            _logger.Verbose("Cleaning old backups complete.");
+        }
+
+
 
         // Determine previous backup time
-        string[] allFiles = await _storageProvider.ListFilesAsync();
+        _logger.Verbose("Checking to see if new backup is needed...");
         DateTime? lastBackupTime = allFiles
             .Select(x => _naming.ExtractTimeFromBackupFileName(x))
             .Where(x => x is not null)

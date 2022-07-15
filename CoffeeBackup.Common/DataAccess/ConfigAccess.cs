@@ -21,11 +21,14 @@ public class ConfigAccess : IConfigAccess
 
     public int GetBackupIntervalDays()
     {
-        int result = ReadInt("BackupIntervalDays", false);
+        int result = ReadInt("BackupIntervalDays", false) ?? 0;
         if (result < 1)
             throw new Exception($"Configuration key 'BackupIntervalDays' is invalid");
         return result;
     }
+
+    public int? CleanupAfterDays()
+        => ReadInt("CleanupAfterDays", true);
 
 
     private string ReadString(string key, bool allowNullOrEmpty)
@@ -36,8 +39,13 @@ public class ConfigAccess : IConfigAccess
         return result ?? "impossible";
     }
 
-    private int ReadInt(string key, bool allowNull = false)
-        => ReadValue<int>(key, allowNull);
+    private int? ReadInt(string key, bool allowNull = false)
+    {
+        int? value = ReadValue<int?>(key, allowNull);
+        if (!allowNull && value is null)
+            throw new Exception($"Config value {key} is null");
+        return value.HasValue ? value.Value : null;
+    }
 
     private T? ReadValue<T>(string key, bool allowNull)
     {
