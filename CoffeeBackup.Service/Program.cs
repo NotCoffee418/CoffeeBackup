@@ -18,7 +18,6 @@ IHost host = Host.CreateDefaultBuilder(args)
 
         // Register workers
         builder.RegisterType<BackupWorker>().As<IHostedService>().SingleInstance();
-        builder.RegisterType<TestWorker>().As<IHostedService>().SingleInstance();
 
         // Register libraries
         builder.ConfigureCommon(configuration);

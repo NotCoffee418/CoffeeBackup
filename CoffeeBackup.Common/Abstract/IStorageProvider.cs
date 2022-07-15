@@ -14,7 +14,7 @@ public interface IStorageProvider
     /// Upload a file to the storage provider.
     /// </summary>
     /// <param name="localFilePath"></param>
-    public Task UploadBackupAsync(string localFilePath);
+    public Task UploadBackupAsync(string localFilePath, string? desiredFileName);
 
     /// <summary>
     /// Remove a file. Used to purge old backups.

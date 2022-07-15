@@ -19,6 +19,14 @@ public class ConfigAccess : IConfigAccess
     public string GetStorjBackupBucket()
         => ReadString("StorjBackupBucket", false);
 
+    public int GetBackupIntervalDays()
+    {
+        int result = ReadInt("BackupIntervalDays", false);
+        if (result < 1)
+            throw new Exception($"Configuration key 'BackupIntervalDays' is invalid");
+        return result;
+    }
+
 
     private string ReadString(string key, bool allowNullOrEmpty)
     {
@@ -27,6 +35,10 @@ public class ConfigAccess : IConfigAccess
             throw new Exception($"Configuration key '{key}' is missing or empty");
         return result ?? "impossible";
     }
+
+    private int ReadInt(string key, bool allowNull = false)
+        => ReadValue<int>(key, allowNull);
+
     private T? ReadValue<T>(string key, bool allowNull)
     {
         try

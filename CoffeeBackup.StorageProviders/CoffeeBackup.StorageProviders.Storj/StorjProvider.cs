@@ -22,6 +22,7 @@ public class StorjProvider : IStorageProvider
 
     public async Task<string[]> ListFilesAsync()
     {
+        _logger.Verbose("Storj: Listing remote files");
         (Bucket bucket, ObjectService objectService) = await GetBucketAndObjectServiceAsync();
         
         // Get objects in bucket
@@ -31,6 +32,8 @@ public class StorjProvider : IStorageProvider
 
     public async Task RemoveFileAsync(string remoteFileName)
     {
+        _logger.Verbose("Storj: Removing remote backup archive at {path}", remoteFileName);
+        
         // Verify file's existance
         string[] existingFiles = await ListFilesAsync();
         if (!existingFiles.ToList().Contains(remoteFileName))
@@ -44,10 +47,11 @@ public class StorjProvider : IStorageProvider
         await objectService.DeleteObjectAsync(bucket, remoteFileName);
     }
 
-    public async Task UploadBackupAsync(string localFilePath)
+    public async Task UploadBackupAsync(string localFilePath, string? desiredFileName)
     {
+        _logger.Verbose("Storj: Uploading backup from {file}", localFilePath);
         (Bucket bucket, ObjectService objectService) = await GetBucketAndObjectServiceAsync();
-        string fileName = Path.GetFileName(localFilePath);
+        string fileName = desiredFileName ?? Path.GetFileName(localFilePath);
         using (FileStream stream = File.OpenRead(localFilePath))
         {
             var uploadOperation = await objectService.UploadObjectAsync(bucket, fileName, new UploadOptions(), stream, false);

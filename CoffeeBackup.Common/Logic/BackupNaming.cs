@@ -51,7 +51,7 @@ public class BackupNaming : IBackupNaming
     public string GenerateBackupFileName(string? prefix = null)
     {
         DateTime time = DateTime.UtcNow;
-        string fileName = string.Format("backup-{1}-{2}.tar.gz", time.ToString("yyyyMMdd"), time.ToString("HHmm"));
+        string fileName = string.Format("backup-{0}-{1}.tar.gz", time.ToString("yyyyMMdd"), time.ToString("HHmm"));
         if (prefix is not null) fileName = prefix + "-" + fileName;
         return fileName;
     }

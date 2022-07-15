@@ -23,6 +23,7 @@ public class ArchiveHandler : IArchiveHandler
 
         // Get tmp path for our archive if not defined
         string archivePath = specificArchivePath ?? Path.GetTempFileName();
+        _logger.Verbose("Creating backup archive at {path}", archivePath);
 
         // List all files with it's desired path in the archive
         (string SourcePath, string DestPath)[] files = Directory.GetFiles(backupSourceDir, "*", SearchOption.AllDirectories)
@@ -54,7 +55,7 @@ public class ArchiveHandler : IArchiveHandler
                 }
             }
         }
-        catch (Exception ex)
+        catch
         {
             if (File.Exists(archivePath))
                 try
