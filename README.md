@@ -14,7 +14,8 @@ This application was tested and developed for Ubuntu 20.04 but should work for o
 
 ## Setting up Storj
 2. Create a Storj bucket [here](https://eu1.storj.io/buckets/creation) and store the passphrase securely.
-3. Create two "API Access" access grants for the Storj bucket [here](https://eu1.storj.io/access-grants) and store the addresses & keys.
+3. Create two "Access Grant" access grants for the Storj bucket [here](https://eu1.storj.io/access-grants) and store the addresses & keys.  
+  Ensure you select 'Create My Own Passphrase' and use the bucket's passphrase.
 	- Name: 'SERVERNAME-backup-service' with Permissions: `Write`, `List`
 		- Add `Delete` permission if you want to auto-clean backups without Azure Functions.
 	- Name: 'SERVERNAME-backup-cleanup' with Permissions: `Delete`, `List`

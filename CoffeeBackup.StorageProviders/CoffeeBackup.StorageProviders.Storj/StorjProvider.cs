@@ -1,19 +1,66 @@
-﻿namespace CoffeeBackup.StorageProviders.Storj;
+﻿using CoffeeBackup.Common.DataAccess;
+using Serilog;
+using uplink.NET.Models;
+using uplink.NET.Services;
+using static CoffeeBackup.Common.Data.Enums;
+
+namespace CoffeeBackup.StorageProviders.Storj;
 
 public class StorjProvider : IStorageProvider
 {
-    public Task<string[]> ListBackupFilesAsync()
+    private IConfigAccess _configAccess;
+    private ILogger _logger;
+
+    public StorjProvider(
+        IConfigAccess configAccess,
+        ILogger logger)
     {
-        throw new NotImplementedException();
+        _configAccess = configAccess;
+        _logger = logger;
+    }
+    
+
+    public async Task<string[]> ListFilesAsync()
+    {
+        (Bucket bucket, ObjectService objectService) = await GetBucketAndObjectServiceAsync();
+        
+        // Get objects in bucket
+        ObjectList objects = await objectService.ListObjectsAsync(bucket, new());
+        return objects.Items.Select(x => x.Key).ToArray();
     }
 
-    public Task RemoveFileAsync(string remoteFileName)
+    public async Task RemoveFileAsync(string remoteFileName)
     {
-        throw new NotImplementedException();
+        // Verify file's existance
+        string[] existingFiles = await ListFilesAsync();
+        if (!existingFiles.ToList().Contains(remoteFileName))
+        {
+            _logger.Warning("Attempted to clean backup {file} but it did not exist", remoteFileName);
+            return;
+        }
+
+        // Remove the file
+        (Bucket bucket, ObjectService objectService) = await GetBucketAndObjectServiceAsync();
+        await objectService.DeleteObjectAsync(bucket, remoteFileName);
     }
 
-    public Task UploadBackupAsync(string localFilePath)
+    public async Task UploadBackupAsync(string localFilePath)
     {
-        throw new NotImplementedException();
+        (Bucket bucket, ObjectService objectService) = await GetBucketAndObjectServiceAsync();
+        string fileName = Path.GetFileName(localFilePath);
+        using (FileStream stream = File.OpenRead(localFilePath))
+        {
+            var uploadOperation = await objectService.UploadObjectAsync(bucket, fileName, new UploadOptions(), stream, false);
+            await uploadOperation.StartUploadAsync();
+        }        
     }
+
+    private async Task<(Bucket, ObjectService)> GetBucketAndObjectServiceAsync()
+    {
+        Access access = new Access(_configAccess.GetStorjAccessGrant());
+        var bucketService = new BucketService(access);
+        Task<Bucket> bucketTask = bucketService.GetBucketAsync(_configAccess.GetStorjBackupBucket());
+        return (await bucketTask, new ObjectService(access));
+    }
+
 }

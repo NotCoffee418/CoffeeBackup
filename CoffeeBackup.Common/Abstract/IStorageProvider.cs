@@ -8,7 +8,7 @@ public interface IStorageProvider
     /// Files should conform to this structure: '(optionalprefix-)backup-20220101-1600.tar.gz'.
     /// </summary>
     /// <returns></returns>
-    public Task<string[]> ListBackupFilesAsync();
+    public Task<string[]> ListFilesAsync();
     
     /// <summary>
     /// Upload a file to the storage provider.

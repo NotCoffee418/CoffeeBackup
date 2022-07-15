@@ -1,3 +1,4 @@
+using CoffeeBackup.Service.Workers;
 /// ---- CONFIGURATION
 IConfigurationBuilder confBuilder = new ConfigurationBuilder();
 string appsettingsPath = Path.Join(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "appsettings.json");
@@ -17,6 +18,7 @@ IHost host = Host.CreateDefaultBuilder(args)
 
         // Register workers
         builder.RegisterType<BackupWorker>().As<IHostedService>().SingleInstance();
+        builder.RegisterType<TestWorker>().As<IHostedService>().SingleInstance();
 
         // Register libraries
         builder.ConfigureCommon(configuration);
@@ -27,6 +29,7 @@ IHost host = Host.CreateDefaultBuilder(args)
         builder.ConfigureStorj();
     })
     .Build();
+
 
 try
 {

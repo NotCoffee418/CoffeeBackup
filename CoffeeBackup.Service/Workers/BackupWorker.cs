@@ -1,4 +1,4 @@
-namespace CoffeeBackup.Service;
+namespace CoffeeBackup.Service.Workers;
 
 public class BackupWorker : BackgroundService
 {

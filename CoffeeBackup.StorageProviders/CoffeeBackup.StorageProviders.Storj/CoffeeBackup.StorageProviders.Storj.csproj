@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="uplink.NET" Version="2.9.2760" />
+    <PackageReference Include="uplink.NET.Linux" Version="2.9.2760" />
+    <PackageReference Include="uplink.NET.Win" Version="2.9.2760" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\CoffeeBackup.Common\CoffeeBackup.Common.csproj" />
   </ItemGroup>
 
