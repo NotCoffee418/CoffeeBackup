@@ -5,3 +5,4 @@ global using Autofac.Extensions.DependencyInjection;
 global using CoffeeBackup.Common;
 global using Serilog;
 global using ILogger = Serilog.ILogger;
+global using CoffeeBackup.StorageProviders.Storj;

@@ -20,6 +20,10 @@ IHost host = Host.CreateDefaultBuilder(args)
 
         // Register libraries
         builder.ConfigureCommon(configuration);
+
+        // Register storage providers
+        // Currently manually, it's partially set up to be expandable to other providers
+        builder.ConfigureStorj();
     })
     .Build();
 
