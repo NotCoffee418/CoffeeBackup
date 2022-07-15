@@ -6,14 +6,17 @@ public static class DependencyInjectionExtensions
     /// Register all classes with a corresponding interface in an assembly that start with a path defined in assemblyPaths
     /// </summary>
     /// <param name="af"></param>
-    /// <param name="assembly"></param>
     /// <param name="assemblyPaths"></param>
     /// <exception cref="Exception"></exception>
     public static void BulkRegister(this ContainerBuilder af, params string[] assemblyPaths)
     {
+        assemblyPaths = assemblyPaths.Where(x => x.Length > 0).ToArray();
         var allTypes = AppDomain.CurrentDomain.GetAssemblies()
+            .SelectMany(x => x.GetReferencedAssemblies())
+            .DistinctBy(x => x.FullName)
             // Get all assemblies starting with anything from assemblyPaths
             .Where(a => assemblyPaths.Select(x => a.FullName.StartsWith(x)).Where<bool>(x => x).Any())
+            .Select(a => Assembly.Load(a))
             .SelectMany(t => t.GetTypes())
             .ToList();
 
