@@ -10,3 +10,6 @@ global using CoffeeBackup.Common;
 global using Microsoft.Extensions.Configuration;
 global using Autofac.Extras.Moq;
 global using CoffeeBackup.Lib;
+global using System.Reflection;
+global using CoffeeBackup.Lib.Handlers;
+global using CoffeeBackup.Tests.TestHelpers;
