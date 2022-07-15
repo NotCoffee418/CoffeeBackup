@@ -26,6 +26,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CoffeeBackup.Common\CoffeeBackup.Common.csproj" />
+    <ProjectReference Include="..\CoffeeBackup.Lib\CoffeeBackup.Lib.csproj" />
   </ItemGroup>
 
 </Project>

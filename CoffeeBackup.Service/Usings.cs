@@ -6,3 +6,4 @@ global using CoffeeBackup.Common;
 global using Serilog;
 global using ILogger = Serilog.ILogger;
 global using CoffeeBackup.StorageProviders.Storj;
+global using CoffeeBackup.Lib;

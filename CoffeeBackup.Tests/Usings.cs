@@ -9,4 +9,4 @@ global using Autofac;
 global using CoffeeBackup.Common;
 global using Microsoft.Extensions.Configuration;
 global using Autofac.Extras.Moq;
-global using CoffeeBackups.Tests.TestHelpers;
+global using CoffeeBackup.Lib;

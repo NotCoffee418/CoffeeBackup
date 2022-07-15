@@ -1,4 +1,4 @@
-﻿namespace CoffeeBackups.Tests.TestHelpers;
+﻿namespace CoffeeBackup.Tests;
 
 public static class DependencyBuilder
 {
@@ -12,6 +12,7 @@ public static class DependencyBuilder
 
         // Register libraries
         builder.ConfigureCommon(mockedConf);
+        builder.ConfigureLib();
 
         return builder;
     }
