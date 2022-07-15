@@ -1,0 +1,14 @@
+﻿global using System;
+global using System.Collections.Generic;
+global using System.Linq;
+global using System.Text;
+global using System.Threading.Tasks;
+global using System.Text.RegularExpressions;
+global using static CoffeeBackup.Common.Data.Enums;
+global using CoffeeBackup.Common.Attributes;
+global using Autofac;
+global using System.Reflection;
+global using CoffeeBackup.Common.Extensions;
+global using Microsoft.Extensions.Configuration;
+global using Serilog;
+global using ILogger = Serilog.ILogger;

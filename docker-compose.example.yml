@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  coffeebackup:
+    container_name: coffeebackup
+    restart: unless-stopped
+    build: # change to dockerhub version
+      context: .
+      dockerfile: CoffeeBackup.Service/Dockerfile 
+    volumes:
+    # -- Application volumes (Leave these)
+    - /etc/coffeebackup/appsettings.json:/app/appsettings.json
+    - /var/log/coffeebackup/:/app/logs/
+
+    # -- Backup Volumes
+    # All paths that require backup should be defined here
+    #- /etc/nginx/sites-enabled/:/backup/etc/nginx/sites-enabled

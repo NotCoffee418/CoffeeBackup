@@ -1,0 +1,15 @@
+global using Xunit;
+global using System;
+global using System.Collections.Generic;
+global using System.Linq;
+global using System.Text;
+global using System.Threading.Tasks;
+global using CoffeeBackup.Common.Logic;
+global using Autofac;
+global using CoffeeBackup.Common;
+global using Microsoft.Extensions.Configuration;
+global using Autofac.Extras.Moq;
+global using CoffeeBackup.Lib;
+global using System.Reflection;
+global using CoffeeBackup.Lib.Handlers;
+global using CoffeeBackup.Tests.TestHelpers;
