@@ -23,4 +23,13 @@ IHost host = Host.CreateDefaultBuilder(args)
     })
     .Build();
 
-await host.RunAsync();
+try
+{
+    await host.RunAsync();
+}
+catch (Exception ex)
+{
+    Log.Logger.Fatal("CoffeeBackup.Service crashed with error {exMsg}", ex.Message);
+    Log.CloseAndFlush();
+    throw;
+}
