@@ -11,8 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoffeeBackup.Tests", "Coffe
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{61DB2B89-F9A3-47D3-B08B-24C2D680E1C6}"
 	ProjectSection(SolutionItems) = preProject
-		appsettings\appsettings.backupservice.example.json = appsettings\appsettings.backupservice.example.json
-		appsettings\appsettings.cleanupfunction.example.json = appsettings\appsettings.cleanupfunction.example.json
+		appsettings.example.json = appsettings.example.json
 		docker-compose.example.yml = docker-compose.example.yml
 		README.md = README.md
 	EndProjectSection

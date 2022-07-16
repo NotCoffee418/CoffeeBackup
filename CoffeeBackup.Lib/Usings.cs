@@ -4,5 +4,5 @@ global using Serilog;
 global using SharpCompress.Common;
 global using SharpCompress.Writers;
 global using CoffeeBackup.Common.Abstract;
-global using CoffeeBackup.Common.DataAccess;
 global using CoffeeBackup.Common.Logic;
+global using Microsoft.Extensions.Configuration;

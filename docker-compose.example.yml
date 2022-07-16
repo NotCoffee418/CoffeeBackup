@@ -14,4 +14,7 @@ services:
 
     # -- Backup Volumes
     # All paths that require backup should be defined here
-    #- /etc/nginx/sites-enabled/:/backup/etc/nginx/sites-enabled
+    # In linux, the backup mount point is `/backup/`
+    - /etc/nginx/sites-enabled/:/backup/etc/nginx/sites-enabled
+    - /home/myusername/:/backup/home/myusername/
+    - /home/anotheruser/specificfile.txt:/backup/home/myusername/specificfile.txt

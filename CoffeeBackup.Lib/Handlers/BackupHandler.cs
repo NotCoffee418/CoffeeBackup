@@ -2,18 +2,18 @@
 
 public class BackupHandler : IBackupHandler
 {
-    private IConfigAccess _configAccess;
+    private IConfiguration _configuration;
     private IStorageProvider _storageProvider;
     private ILogger _logger;
     private IBackupNaming _naming;
 
     public BackupHandler(
-        IConfigAccess configAccess,
+        IConfiguration configuration,
         IStorageProvider storageProvider,
         ILogger logger,
         IBackupNaming naming)
     {
-        _configAccess = configAccess;
+        _configuration = configuration;
         _storageProvider = storageProvider;
         _logger = logger;
         _naming = naming;
@@ -27,8 +27,8 @@ public class BackupHandler : IBackupHandler
         }
 
         // Try cleanup old backups if defined in Service
-        int? cleanupAfterDays = _configAccess.CleanupAfterDays();
-        if (cleanupAfterDays is not null)
+        int? cleanupAfterDays = _configuration.GetSection("BackupSettings:CleanupAfterDays").Get<int?>();
+        if (cleanupAfterDays is not null && cleanupAfterDays > 0)
         {
             _logger.Verbose("Cleaning old backups...");
             DateTime oldBackupTimeBefore = DateTime.UtcNow.AddDays(cleanupAfterDays.Value * -1);

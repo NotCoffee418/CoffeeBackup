@@ -2,7 +2,7 @@
 
 public static class ContainerConfig
 {
-    public static void ConfigureStorj(this ContainerBuilder builder)
+    public static void TryConfigureStorj(this ContainerBuilder builder, IConfiguration config)
     {
         // Register interfaces with matching classes
         builder.BulkRegister("CoffeeBackup.StorageProviders.Storj");

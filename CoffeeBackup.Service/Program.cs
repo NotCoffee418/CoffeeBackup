@@ -1,4 +1,5 @@
 using CoffeeBackup.Service.Workers;
+using CoffeeBackup.StorageProviders.Storj;
 /// ---- CONFIGURATION
 IConfigurationBuilder confBuilder = new ConfigurationBuilder();
 string appsettingsPath = Path.Join(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "appsettings.json");
@@ -23,10 +24,31 @@ IHost host = Host.CreateDefaultBuilder(args)
         builder.ConfigureCommon(configuration);
         builder.ConfigureLogger(configuration);
         builder.ConfigureLib();
+        builder.TryConfigureStorj(configuration);
 
-        // Register storage providers
-        // Currently manually, it's partially set up to be expandable to other providers
-        builder.ConfigureStorj();
+        // Register a storage providers
+        // Note for future: When trying to implement loading from assemblies that have not been accessed yet, you wont find the types
+        List<IStorageProviderRegistration> registrationOptions = new()
+        {
+            new RegisterStorj(),
+        };
+        bool foundProvider = false;
+        foreach (var providerReg in registrationOptions)
+            if (providerReg.IsProviderConfigured(configuration))
+            {
+                foundProvider = true;
+                providerReg.Register(builder);
+                break;
+            }
+
+        // Ensure a provider is registered
+        if (!foundProvider)
+        {
+            string exMsg = "No storage provider was configured. Crashing.";
+            Log.Logger.Fatal(exMsg);
+            Log.CloseAndFlush();
+            throw new Exception(exMsg);
+        }
     })
     .Build();
 
