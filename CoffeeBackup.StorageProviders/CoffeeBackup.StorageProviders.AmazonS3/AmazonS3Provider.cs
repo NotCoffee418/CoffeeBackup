@@ -8,9 +8,19 @@ public class AmazonS3Provider : IStorageProvider
     {
         _configuration = configuration;
         _logger = logger;
+
+        // Decide on region name
+        string? regionName = configuration.GetSection("StorageProvider:S3:RegionName").Get<string>();
+        if (string.IsNullOrEmpty(regionName))
+            regionName = "us-east-1";
+        
+        // Set up client
         s3Client = new AmazonS3Client(
             configuration.GetRequiredSection("StorageProvider:S3:AccessKeyId").Get<string>(),
-            configuration.GetRequiredSection("StorageProvider:S3:AccessKeySecret").Get<string>());
+            configuration.GetRequiredSection("StorageProvider:S3:AccessKeySecret").Get<string>(),
+            Amazon.RegionEndpoint.GetBySystemName(regionName));
+
+        // Preemtively set bucket name
         BucketName = _configuration.GetRequiredSection("StorageProvider:S3:BackupBucketName").Get<string>();
     }
 
@@ -18,7 +28,7 @@ public class AmazonS3Provider : IStorageProvider
     private ILogger _logger;
     static IAmazonS3 s3Client;
     
-    public string BucketName { get; }
+    public string BucketName { get; init; }
 
     public async Task<string[]> ListFilesAsync()
     {

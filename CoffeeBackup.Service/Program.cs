@@ -42,7 +42,7 @@ IHost host = Host.CreateDefaultBuilder(args)
         // Ensure a provider is registered
         if (!foundProvider)
         {
-            string exMsg = "No storage provider was configured. Crashing.";
+            string exMsg = "No storage provider was configured, crashing. Check the README for instructions at https://github.com/NotCoffee418/CoffeeBackup#readme";
             Log.Logger.Fatal(exMsg);
             Log.CloseAndFlush();
             throw new Exception(exMsg);

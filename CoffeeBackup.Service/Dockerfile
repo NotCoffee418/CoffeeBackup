@@ -6,6 +6,10 @@ WORKDIR /app
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["CoffeeBackup.Service/CoffeeBackup.Service.csproj", "CoffeeBackup.Service/"]
+COPY ["CoffeeBackup.StorageProviders/CoffeeBackup.StorageProviders.Storj/CoffeeBackup.StorageProviders.Storj.csproj", "CoffeeBackup.StorageProviders/CoffeeBackup.StorageProviders.Storj/"]
+COPY ["CoffeeBackup.Common/CoffeeBackup.Common.csproj", "CoffeeBackup.Common/"]
+COPY ["CoffeeBackup.Lib/CoffeeBackup.Lib.csproj", "CoffeeBackup.Lib/"]
+COPY ["CoffeeBackup.StorageProviders/CoffeeBackup.StorageProviders.AmazonS3/CoffeeBackup.StorageProviders.AmazonS3.csproj", "CoffeeBackup.StorageProviders/CoffeeBackup.StorageProviders.AmazonS3/"]
 RUN dotnet restore "CoffeeBackup.Service/CoffeeBackup.Service.csproj"
 COPY . .
 WORKDIR "/src/CoffeeBackup.Service"
