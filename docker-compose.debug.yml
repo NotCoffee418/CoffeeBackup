@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  coffeebackup:
+    container_name: coffeebackup-debug
+    restart: unless-stopped
+    build: # change to dockerhub version
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+    # -- Application volumes (Leave these)
+    - ./CoffeeBackup.Service/bin/Debug/net6.0/appsettings.json:/app/appsettings.json
+    - ./CoffeeBackup.Service/bin/Debug/net6.0/logs:/app/logs/
+
+    # -- Backup Volumes
+    # All paths that require backup should be defined here
+    # In linux, the backup mount point is `/backup/`
+    - ./CoffeeBackup.Service/bin/Debug/net6.0/backupdata:/backup/:ro
+    - ./CoffeeBackup.Service/bin/Debug/net6.0/backupdata:/backup/andnested:ro
