@@ -1,6 +1,6 @@
 # CoffeeBackup
 
-CoffeeBackup is a backup service for utilizing docker-compose volumes to backup data to Amazon S3 or Storj.
+CoffeeBackup is a backup service utilizing docker-compose volumes to back up to S3 or Storj.
 This application was tested and developed for Ubuntu 20.04 but should work for other Linux distributions as well as Mac and Windows.
 
 ## Installation
