@@ -1,4 +1,6 @@
-﻿namespace CoffeeBackup.Common;
+﻿using CoffeeBackup.Common.Abstract;
+
+namespace CoffeeBackup.Common;
 
 public static class ContainerConfig
 {

@@ -1,5 +1,4 @@
-﻿using CoffeeBackup.Common.DataAccess;
-using Serilog;
+﻿using Serilog;
 using uplink.NET.Models;
 using uplink.NET.Services;
 using static CoffeeBackup.Common.Data.Enums;
@@ -8,14 +7,14 @@ namespace CoffeeBackup.StorageProviders.Storj;
 
 public class StorjProvider : IStorageProvider
 {
-    private IConfigAccess _configAccess;
+    private IConfiguration _configuration;
     private ILogger _logger;
 
     public StorjProvider(
-        IConfigAccess configAccess,
+        IConfiguration configuration,
         ILogger logger)
     {
-        _configAccess = configAccess;
+        _configuration = configuration;
         _logger = logger;
     }
     
@@ -61,9 +60,11 @@ public class StorjProvider : IStorageProvider
 
     private async Task<(Bucket, ObjectService)> GetBucketAndObjectServiceAsync()
     {
-        Access access = new Access(_configAccess.GetStorjAccessGrant());
+        Access access = new Access(
+            _configuration.GetRequiredSection("StorageProvider:Storj:AccessGrant").Get<string>());
         var bucketService = new BucketService(access);
-        Task<Bucket> bucketTask = bucketService.GetBucketAsync(_configAccess.GetStorjBackupBucket());
+        Task<Bucket> bucketTask = bucketService.GetBucketAsync(
+            _configuration.GetRequiredSection("StorageProvider:Storj:BackupBucketName").Get<string>());
         return (await bucketTask, new ObjectService(access));
     }
 

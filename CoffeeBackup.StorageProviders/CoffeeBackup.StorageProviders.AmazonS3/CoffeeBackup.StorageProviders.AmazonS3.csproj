@@ -7,9 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="uplink.NET" Version="2.9.2774" />
-    <PackageReference Include="uplink.NET.Linux" Version="2.9.2774" />
-    <PackageReference Include="uplink.NET.Win" Version="2.9.2774" />
+    <PackageReference Include="AWSSDK.S3" Version="3.7.9.25" />
   </ItemGroup>
 
   <ItemGroup>

@@ -7,24 +7,24 @@ public class BackupWorker : BackgroundService
     private readonly ILogger _logger;
     private readonly IStorageProvider _storageProvider;
     private readonly IBackupNaming _naming;
-    private readonly IConfigAccess _configAccess;
     private readonly IArchiveHandler _archiveHandler;
     private readonly IBackupHandler _backupHandler;
+    private readonly IConfiguration _configuration;
 
     public BackupWorker(
         ILogger logger,
         IStorageProvider storageProvider,
         IBackupNaming naming,
-        IConfigAccess configAccess,
         IArchiveHandler archiveHandler,
-        IBackupHandler backupHandler)
+        IBackupHandler backupHandler,
+        IConfiguration configuration)
     {
         _logger = logger;
         _storageProvider = storageProvider;
         _naming = naming;
-        _configAccess = configAccess;
         _archiveHandler = archiveHandler;
         _backupHandler = backupHandler;
+        _configuration = configuration;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -68,7 +68,7 @@ public class BackupWorker : BackgroundService
 
         // Determine if we need to do a new backup
         DateTime newBackupRequiredAfter = lastBackupTime == null ? DateTime.MinValue :
-            lastBackupTime.Value.AddDays(_configAccess.GetBackupIntervalDays());
+            lastBackupTime.Value.AddDays(_configuration.GetRequiredSection("BackupSettings:BackupIntervalDays").Get<int>());
         bool needBackup = DateTime.UtcNow > newBackupRequiredAfter;
         _logger.Verbose("Need backup? {need}", needBackup);
         if (!needBackup) return;
