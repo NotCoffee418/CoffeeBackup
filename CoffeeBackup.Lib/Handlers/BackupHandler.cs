@@ -19,11 +19,11 @@ public class BackupHandler : IBackupHandler
         _naming = naming;
     }
 
-    public async Task TryCleanOldBackups(string[]? allFiles)
+    public async Task TryCleanOldBackups(string[]? allObjects)
     {
-        if (allFiles is null)
+        if (allObjects is null)
         {
-            allFiles = await _storageProvider.ListFilesAsync();
+            allObjects = await _storageProvider.ListFilesAsync();
         }
 
         // Try cleanup old backups if defined in Service
@@ -32,7 +32,7 @@ public class BackupHandler : IBackupHandler
         {
             _logger.Verbose("Cleaning old backups...");
             DateTime oldBackupTimeBefore = DateTime.UtcNow.AddDays(cleanupAfterDays.Value * -1);
-            string[] filesToClean = allFiles
+            string[] filesToClean = allObjects
                 .Select(x => (_naming.ExtractTimeFromBackupFileName(x), x))
                 .Where(x => x.Item1 < oldBackupTimeBefore)
                 .Select(x => x.Item2)

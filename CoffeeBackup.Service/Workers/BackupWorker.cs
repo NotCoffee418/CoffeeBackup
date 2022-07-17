@@ -50,15 +50,16 @@ public class BackupWorker : BackgroundService
     /// <returns></returns>
     private async Task CheckAndTryBackupAsync()
     {
-        _logger.Verbose("Get existing files in storage");
-        string[] allFiles = await _storageProvider.ListFilesAsync();
+        _logger.Verbose("Starting new backup check...");
+        string[] allObjects = await _storageProvider.ListFilesAsync();
 
         // Try cleanup old backups if defined in Service
-        await _backupHandler.TryCleanOldBackups(allFiles);
+        _logger.Verbose("Attempting to clean old backups if configured");
+        await _backupHandler.TryCleanOldBackups(allObjects);            
 
         // Determine previous backup time
         _logger.Verbose("Checking to see if new backup is needed...");
-        DateTime? lastBackupTime = allFiles
+        DateTime? lastBackupTime = allObjects
             .Select(x => _naming.ExtractTimeFromBackupFileName(x))
             .Where(x => x is not null)
             .Select(x => x.Value)
@@ -67,8 +68,9 @@ public class BackupWorker : BackgroundService
         _logger.Verbose("Previous backup was at {time}", lastBackupTime == null ? "never" : lastBackupTime);
 
         // Determine if we need to do a new backup
+        int intervalDays = _configuration.GetRequiredSection("BackupSettings:BackupIntervalDays").Get<int>();
         DateTime newBackupRequiredAfter = lastBackupTime == null ? DateTime.MinValue :
-            lastBackupTime.Value.AddDays(_configuration.GetRequiredSection("BackupSettings:BackupIntervalDays").Get<int>());
+            lastBackupTime.Value.AddDays(intervalDays);
         bool needBackup = DateTime.UtcNow > newBackupRequiredAfter;
         _logger.Verbose("Need backup? {need}", needBackup);
         if (!needBackup) return;
@@ -89,7 +91,7 @@ public class BackupWorker : BackgroundService
         }
         catch (Exception ex)
         {
-            _logger.Error("Backup failed with error {exMsg}", ex.Message);
+            _logger.Error("Backup failed: {exMsg}", ex.Message);
         }
         finally // Cleanup
         {

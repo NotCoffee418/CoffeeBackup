@@ -2,6 +2,9 @@
 
 public class AmazonS3Provider : IStorageProvider
 {
+    private IConfiguration _configuration;
+    private ILogger _logger;
+
     public AmazonS3Provider(
         IConfiguration configuration,
         ILogger logger)
@@ -13,9 +16,9 @@ public class AmazonS3Provider : IStorageProvider
         string? regionName = configuration.GetSection("StorageProvider:S3:RegionName").Get<string>();
         if (string.IsNullOrEmpty(regionName))
             regionName = "us-east-1";
-        
+
         // Set up client
-        s3Client = new AmazonS3Client(
+        Client = new AmazonS3Client(
             configuration.GetRequiredSection("StorageProvider:S3:AccessKeyId").Get<string>(),
             configuration.GetRequiredSection("StorageProvider:S3:AccessKeySecret").Get<string>(),
             Amazon.RegionEndpoint.GetBySystemName(regionName));
@@ -23,12 +26,9 @@ public class AmazonS3Provider : IStorageProvider
         // Preemtively set bucket name
         BucketName = _configuration.GetRequiredSection("StorageProvider:S3:BackupBucketName").Get<string>();
     }
-
-    private IConfiguration _configuration;
-    private ILogger _logger;
-    static IAmazonS3 s3Client;
     
-    public string BucketName { get; init; }
+    private IAmazonS3 Client { get; init; }    
+    private string BucketName { get; init; }
 
     public async Task<string[]> ListFilesAsync()
     {
@@ -36,17 +36,9 @@ public class AmazonS3Provider : IStorageProvider
         {
             BucketName = this.BucketName,
         };
-        ListObjectsV2Response response = await s3Client.ListObjectsV2Async(request);
+        ListObjectsV2Response response = await Client.ListObjectsV2Async(request);
         return response.S3Objects.Select(x => x.Key).ToArray();
     }
-
-    public Task RemoveFileAsync(string remoteFileName)
-    {
-        _logger.Warning("CoffeeBackup does not support removing old backups on Amazon S3. " +
-            "Please set up a lifecycle policy to clean backups instead.");
-        return Task.CompletedTask;
-    }
-
     public Task UploadBackupAsync(string localFilePath, string? desiredFileName)
     {
         _logger.Verbose(messageTemplate: "S3: Uploading backup from {file}", localFilePath);
@@ -58,6 +50,14 @@ public class AmazonS3Provider : IStorageProvider
             StorageClass = StorageClassInterpreter.GetStorageClassFromName(
                 _configuration.GetSection("StorageProvider:S3:StorageClass").Get<string>())
         };
-        return s3Client.PutObjectAsync(request);
+        return Client.PutObjectAsync(request);
     }
+
+    public Task RemoveFileAsync(string remoteFileName)
+    {
+        _logger.Warning("CoffeeBackup does not support removing old backups on Amazon S3. " +
+            "Please set up a lifecycle policy to clean backups instead.");
+        return Task.CompletedTask;
+    }
+
 }

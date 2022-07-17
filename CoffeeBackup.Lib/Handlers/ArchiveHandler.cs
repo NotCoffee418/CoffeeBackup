@@ -14,24 +14,33 @@ public class ArchiveHandler : IArchiveHandler
     /// </summary>
     /// <param name="backupSourceDir">Root of the archive</param>
     /// <param name="specificArchivePath">Optionally specify an output path, otherwise a temp path is used</param>
-    /// <returns></returns>
-    /// <exception cref="Exception"></exception>
+    /// <returns>Path to the temporary archive file/returns>
     public Task<string> GenerateBackupAsync(string backupSourceDir, string? specificArchivePath = null)
     {
         // Ensure trailing lash
         if (!backupSourceDir.EndsWith("/")) backupSourceDir += "/";
 
-        // Get tmp path for our archive if not defined
-        string archivePath = specificArchivePath ?? Path.GetTempFileName();
-        _logger.Verbose("Creating backup archive at {path}", archivePath);
+        // Validate directory
+        if (!Directory.Exists(backupSourceDir))
+            throw new Exception($"No backup paths mounted to '{backupSourceDir}'. See documentation for configuring backups.");
 
         // List all files with it's desired path in the archive
         (string SourcePath, string DestPath)[] files = Directory.GetFiles(backupSourceDir, "*", SearchOption.AllDirectories)
             .Select(x => (x, x.Substring(backupSourceDir.Length))) // Remove /backup/ in destpath
             .ToArray();
 
+        // Don't attempt to backup if no backup paths are bound
+        if (files.Length == 0)
+            throw new Exception("Found no files to back up. Please ensure that the desired backup locations " +
+                "are correcly mounted to the internal /backup/ directory");
+
+        string? archivePath = null;
         try
         {
+            // Get tmp path for our archive if not defined
+            archivePath = specificArchivePath ?? Path.GetTempFileName();
+            _logger.Verbose("Creating backup archive at {path}", archivePath);
+            
             // Define writer
             WriterOptions wo = new(CompressionType.GZip)
             {
@@ -57,7 +66,7 @@ public class ArchiveHandler : IArchiveHandler
         }
         catch
         {
-            if (File.Exists(archivePath))
+            if (!string.IsNullOrEmpty(archivePath) && File.Exists(archivePath))
                 try
                 {
                     File.Delete(archivePath);
