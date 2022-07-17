@@ -9,3 +9,6 @@ global using CoffeeBackup.Lib;
 global using CoffeeBackup.Common.Abstract;
 global using CoffeeBackup.Common.Logic;
 global using CoffeeBackup.StorageProviders;
+global using CoffeeBackup.Service.Workers;
+global using CoffeeBackup.StorageProviders.AmazonS3;
+global using CoffeeBackup.StorageProviders.Storj;

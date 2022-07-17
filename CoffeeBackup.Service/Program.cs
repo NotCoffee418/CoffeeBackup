@@ -1,5 +1,3 @@
-using CoffeeBackup.Service.Workers;
-using CoffeeBackup.StorageProviders.Storj;
 /// ---- CONFIGURATION
 IConfigurationBuilder confBuilder = new ConfigurationBuilder();
 string appsettingsPath = Path.Join(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "appsettings.json");
@@ -24,12 +22,12 @@ IHost host = Host.CreateDefaultBuilder(args)
         builder.ConfigureCommon(configuration);
         builder.ConfigureLogger(configuration);
         builder.ConfigureLib();
-        builder.TryConfigureStorj(configuration);
 
         // Register a storage providers
         // Note for future: When trying to implement loading from assemblies that have not been accessed yet, you wont find the types
         List<IStorageProviderRegistration> registrationOptions = new()
         {
+            new RegisterAmazonS3(),
             new RegisterStorj(),
         };
         bool foundProvider = false;

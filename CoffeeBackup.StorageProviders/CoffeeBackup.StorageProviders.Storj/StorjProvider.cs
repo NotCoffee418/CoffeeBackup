@@ -61,10 +61,10 @@ public class StorjProvider : IStorageProvider
     private async Task<(Bucket, ObjectService)> GetBucketAndObjectServiceAsync()
     {
         Access access = new Access(
-            _configuration.GetRequiredSection("StorageProvider:Storj:StorjAccessGrant").Get<string>());
+            _configuration.GetRequiredSection("StorageProvider:Storj:AccessGrant").Get<string>());
         var bucketService = new BucketService(access);
         Task<Bucket> bucketTask = bucketService.GetBucketAsync(
-            _configuration.GetRequiredSection("StorageProvider:Storj:StorjBackupBucket").Get<string>());
+            _configuration.GetRequiredSection("StorageProvider:Storj:BackupBucketName").Get<string>());
         return (await bucketTask, new ObjectService(access));
     }
 

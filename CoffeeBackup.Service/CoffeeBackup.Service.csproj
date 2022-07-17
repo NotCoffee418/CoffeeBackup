@@ -19,6 +19,7 @@
   <ItemGroup>
     <ProjectReference Include="..\CoffeeBackup.Common\CoffeeBackup.Common.csproj" />
     <ProjectReference Include="..\CoffeeBackup.Lib\CoffeeBackup.Lib.csproj" />
+    <ProjectReference Include="..\CoffeeBackup.StorageProviders\CoffeeBackup.StorageProviders.AmazonS3\CoffeeBackup.StorageProviders.AmazonS3.csproj" />
     <ProjectReference Include="..\CoffeeBackup.StorageProviders\CoffeeBackup.StorageProviders.Storj\CoffeeBackup.StorageProviders.Storj.csproj" />
   </ItemGroup>
 </Project>

@@ -13,7 +13,11 @@ Backups can be securely stored in one of the following storage providers:
 - [Storj](https://storj.io/)
 
 ### Provider: Amazon S3
- (( Documentation coming soon ))
+1. [Create](https://s3.console.aws.amazon.com/s3/bucket/create) an Amazon S3 bucket with versioning enabled to protect against overwrites.
+3. Create a policy with the following permissions for the bucket:  
+   - List: ListBucket
+   - Write: PutObject
+5. Optional: Create a lifecycle rule under Management > Lifecycle Rules that expires objects older than the desired amount of time.
 
 ### Provider: Storj
 
@@ -41,9 +45,14 @@ For this guide, we'll use an appsettings file.
 4. Change settings to your preference:
    - **BackupIntervalDays:** Amount of days between each backup.
    - Configure one and only one storage location:
+      - **S3:**
+        - **AccessKeyId:** Your AWS access key ID.
+		- **SecretAccessKey:** Your AWS secret access key.
+		- **BackupBucketName:** The name of the bucket to store backups in. It should be exclusive for backups made by this instance.
+		- **StorageClass**: The desired storage class for your backups. By default it uses standard infrequent access.
       - **Storj:**
         - **AccessGrantToken:** Access grant token for the Storj bucket.
-        - **StorjBackupBucket:** Name of the Storj bucket.
+        - **BackupBucketName:** Name of the Storj bucket.
 5. CTRL+X to save and exit out.
 
 ### Setting up the docker-compose.yml file
@@ -86,13 +95,13 @@ services:
 
 ### Option 1: Using Amazon S3
 
-Configure S3 to remove files older than a certain date as desired.
-
+Set up a lifecycle policy on your bucked to clean out or deep archive old backups through AWS.
 
 ### Option 2: Through the backup service (not recommended)
 
 You can also clean up old backups using the backup service directly.
 This is easier to set up, but not recommended in the event the server is compromised, a malicious actor can also remove backups.
+Additionally, it is disabled for AWS for security reasons. This (currently) only works for Storj due to a lack of a better alternative.
 
 1. Ensure that the access credentials used also have `delete` permission.
 2. Modify the configuration through either the appsettings.json file or the docker-compose.yml file.

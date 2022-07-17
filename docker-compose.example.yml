@@ -6,7 +6,7 @@ services:
     restart: unless-stopped
     build: # change to dockerhub version
       context: .
-      dockerfile: CoffeeBackup.Service/Dockerfile 
+      dockerfile: CoffeeBackup.Service/Dockerfile
     volumes:
     # -- Application volumes (Leave these)
     - /etc/coffeebackup/appsettings.json:/app/appsettings.json
