@@ -8,7 +8,8 @@
       "dotnetRunMessages": true
     },
     "Docker": {
-      "commandName": "Docker"
+      "commandName": "Docker",
+      "commandLineArgs": "-w .. --mount type=bind,source=/backup:,target=C:\\backup"
     },
     "WSL": {
       "commandName": "WSL2",
@@ -16,6 +17,13 @@
         "DOTNET_ENVIRONMENT": "Development"
       },
       "distributionName": ""
+    },
+    "Docker Compose Debug": {
+      "commandName": "Executable",
+      "executablePath": "docker-compose",
+      "commandLineArgs": "-f docker-compose.debug.yml up --build --force-recreate",
+      "workingDirectory": "..",
+      "nativeDebugging": true
     }
   }
 }

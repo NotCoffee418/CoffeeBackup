@@ -4,9 +4,7 @@ services:
   coffeebackup:
     container_name: coffeebackup
     restart: unless-stopped
-    build: # change to dockerhub version
-      context: .
-      dockerfile: CoffeeBackup.Service/Dockerfile
+    image: notcoffee418/coffeebackup:latest
     volumes:
     # -- Application volumes (Leave these)
     - /etc/coffeebackup/appsettings.json:/app/appsettings.json
@@ -15,6 +13,6 @@ services:
     # -- Backup Volumes
     # All paths that require backup should be defined here
     # In linux, the backup mount point is `/backup/`
-    - /etc/nginx/sites-enabled/:/backup/etc/nginx/sites-enabled
-    - /home/myusername/:/backup/home/myusername/
-    - /home/anotheruser/specificfile.txt:/backup/home/myusername/specificfile.txt
+    - /etc/nginx/sites-enabled/:/backup/etc/nginx/sites-enabled:ro
+    - /home/myusername:/backup/home/myusername:ro
+    - /home/anotheruser/specificfile.txt:/backup/home/myusername/specificfile.txt:ro

@@ -12,7 +12,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{61DB2B89-F9A3-47D3-B08B-24C2D680E1C6}"
 	ProjectSection(SolutionItems) = preProject
 		appsettings.example.json = appsettings.example.json
+		.github\workflows\ci-action.yml = .github\workflows\ci-action.yml
+		docker-compose.debug.yml = docker-compose.debug.yml
 		docker-compose.example.yml = docker-compose.example.yml
+		Dockerfile = Dockerfile
 		README.md = README.md
 	EndProjectSection
 EndProject
@@ -22,7 +25,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoffeeBackup.StorageProvide
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoffeeBackup.Lib", "CoffeeBackup.Lib\CoffeeBackup.Lib.csproj", "{A1C88473-F4E2-4F55-9042-60D2D86838B9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoffeeBackup.StorageProviders.AmazonS3", "CoffeeBackup.StorageProviders\CoffeeBackup.StorageProviders.AmazonS3\CoffeeBackup.StorageProviders.AmazonS3.csproj", "{88BFE31B-4D2E-4418-8754-D4FBE63CE197}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoffeeBackup.StorageProviders.AmazonS3", "CoffeeBackup.StorageProviders\CoffeeBackup.StorageProviders.AmazonS3\CoffeeBackup.StorageProviders.AmazonS3.csproj", "{88BFE31B-4D2E-4418-8754-D4FBE63CE197}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
