@@ -4,10 +4,7 @@ services:
   coffeebackup:
     container_name: coffeebackup
     restart: unless-stopped
-    image: ${DOCKER_REGISTRY-}coffeebackup-debug
-    build: # change to dockerhub version
-      context: .
-      dockerfile: Dockerfile
+    image: notcoffee418/coffeebackup:latest
     volumes:
     # -- Application volumes (Leave these)
     - /etc/coffeebackup/appsettings.json:/app/appsettings.json
