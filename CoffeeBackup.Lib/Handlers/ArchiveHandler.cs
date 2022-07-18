@@ -15,7 +15,7 @@ public class ArchiveHandler : IArchiveHandler
     /// <param name="backupSourceDir">Root of the archive</param>
     /// <param name="specificArchivePath">Optionally specify an output path, otherwise a temp path is used</param>
     /// <returns>Path to the temporary archive file/returns>
-    public Task<string> GenerateBackupAsync(string backupSourceDir, string? specificArchivePath = null)
+    public Task<string> GenerateBackupAsync(string backupSourceDir, BackupReport workingReport, string? specificArchivePath = null)
     {
         // Ensure trailing lash
         if (!backupSourceDir.EndsWith("/")) backupSourceDir += "/";
@@ -59,15 +59,18 @@ public class ArchiveHandler : IArchiveHandler
                     _logger.Verbose("Including file: {path}", destPath);
                     using (FileStream fs = File.OpenRead(sourcePath))
                         writer.Write(destPath, fs, modificationTime);
+                    workingReport.AddedFiles.Add(destPath);
                 }
                 catch (Exception ex)
                 {
                     _logger.Warning($"Failed to include file: '{sourcePath}' because of: {ex.Message}");
+                    workingReport.IgnoredFiles.Add((destPath, ex.Message));
                 }
             }
         }
-        catch
+        catch (Exception backupEx)
         {
+            workingReport.Errors.Add(backupEx.Message);
             if (!string.IsNullOrEmpty(archivePath) && File.Exists(archivePath))
                 try
                 {
@@ -76,6 +79,7 @@ public class ArchiveHandler : IArchiveHandler
                 catch (Exception delEx)
                 {
                     throw new Exception("An error occurred while creating an archive and archive cleanup failed.", delEx);
+                    workingReport.Errors.Add(delEx.Message);
                 }
             throw;
         }

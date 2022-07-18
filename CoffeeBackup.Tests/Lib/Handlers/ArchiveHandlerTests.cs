@@ -16,7 +16,7 @@ public class ArchiveHandlerTests
         try
         {
             // Generate the backup
-            await archiveHandler.GenerateBackupAsync(sourceDir, archiveFile);
+            await archiveHandler.GenerateBackupAsync(sourceDir,new(), archiveFile);
 
             // Validate
             Assert.True(File.Exists(archiveFile));
@@ -45,7 +45,7 @@ public class ArchiveHandlerTests
             using (Stream file = File.Create(Path.Combine(sourceDir, "lockedfile.txt")))
             {
                 // Generate the backup
-                await archiveHandler.GenerateBackupAsync(sourceDir, archiveFile);
+                await archiveHandler.GenerateBackupAsync(sourceDir, new(), archiveFile);
             }
             
             // Validate
