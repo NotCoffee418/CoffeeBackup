@@ -12,3 +12,4 @@ global using CoffeeBackup.Common.Extensions;
 global using Microsoft.Extensions.Configuration;
 global using Serilog;
 global using ILogger = Serilog.ILogger;
+global using CoffeeBackup.Common.Models;

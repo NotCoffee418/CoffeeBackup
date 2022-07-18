@@ -12,4 +12,15 @@ public class Enums
         // One lifetime instance
         Lifetime = 3,
     }
+
+    public enum BackupStatus
+    {
+        Undefined = 0,
+        // Backup succeeded
+        Success = 1,
+        // Backup is running after a long period, possible hang
+        Inconclusive = 2,
+        // Backup has failed
+        Failed = 3,
+    }
 }

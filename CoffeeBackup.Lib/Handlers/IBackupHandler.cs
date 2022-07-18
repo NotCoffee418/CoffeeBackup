@@ -2,6 +2,7 @@
 {
     public interface IBackupHandler
     {
-        Task TryCleanOldBackups(string[]? allFiles);
+        string GetHumanBackupSize(string archivePath);
+        Task TryCleanOldBackups(string[]? allObjects);
     }
 }

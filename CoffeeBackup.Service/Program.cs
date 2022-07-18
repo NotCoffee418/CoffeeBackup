@@ -25,28 +25,42 @@ IHost host = Host.CreateDefaultBuilder(args)
 
         // Register a storage providers
         // Note for future: When trying to implement loading from assemblies that have not been accessed yet, you wont find the types
-        List<IStorageProviderRegistration> registrationOptions = new()
+        List<IStorageProviderRegistration> storageOptions = new()
         {
             new RegisterAmazonS3(),
             new RegisterStorj(),
         };
-        bool foundProvider = false;
-        foreach (var providerReg in registrationOptions)
-            if (providerReg.IsProviderConfigured(configuration))
+        bool foundStorageProvider = false;
+        foreach (var storageProviderReg in storageOptions)
+            if (storageProviderReg.IsProviderConfigured(configuration))
             {
-                foundProvider = true;
-                providerReg.Register(builder);
+                foundStorageProvider = true;
+                storageProviderReg.Register(builder);
                 break;
             }
 
         // Ensure a provider is registered
-        if (!foundProvider)
+        if (!foundStorageProvider)
         {
             string exMsg = "No storage provider was configured, crashing. Check the README for instructions at https://github.com/NotCoffee418/CoffeeBackup#readme";
             Log.Logger.Fatal(exMsg);
             Log.CloseAndFlush();
             throw new Exception(exMsg);
         }
+
+        // Register a notification provider
+        List<INotificationProviderRegistration> notifyOptions = new()
+        {
+            new SendGridProviderRegistration(),
+            new EmptyNotificationProviderRegistration(), // Must exist
+        };
+        foreach (var notifyProviderReg in notifyOptions)
+            if (notifyProviderReg.IsProviderConfigured(configuration))
+            {
+                foundStorageProvider = true;
+                notifyProviderReg.Register(builder);
+                break;
+            }
     })
     .Build();
 

@@ -1,4 +1,6 @@
-﻿namespace CoffeeBackup.Lib.Handlers;
+﻿using ByteSizeLib;
+
+namespace CoffeeBackup.Lib.Handlers;
 
 public class BackupHandler : IBackupHandler
 {
@@ -17,6 +19,28 @@ public class BackupHandler : IBackupHandler
         _storageProvider = storageProvider;
         _logger = logger;
         _naming = naming;
+    }
+
+    public string GetHumanBackupSize(string archivePath)
+    {
+        if (!File.Exists(archivePath))
+            return "Unknown";
+        
+        // Get size in different display formats
+        List<(string Identifier, double Size)> roundedSizes = new();
+        ByteSize bytesize = ByteSize.FromBytes(new FileInfo(archivePath).Length);
+        roundedSizes.Add(("TB", Math.Round(bytesize.TeraBytes, 2)));
+        roundedSizes.Add(("GB", Math.Round(bytesize.GigaBytes, 2)));
+        roundedSizes.Add(("MB", Math.Round(bytesize.MegaBytes, 2)));
+        roundedSizes.Add(("KB", Math.Round(bytesize.KiloBytes, 2)));
+
+        // Choose the ideal one and return it
+        foreach ((string Identifier, double Size) roundedSize in roundedSizes)
+            if (roundedSize.Size > 1)
+                return $"{roundedSize.Size} {roundedSize.Identifier}";
+
+        // Still here, return bytes
+        return $"{bytesize.Bytes} bytes";
     }
 
     public async Task TryCleanOldBackups(string[]? allObjects)

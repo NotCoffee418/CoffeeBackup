@@ -59,10 +59,19 @@ Change settings to your preference:
      - **AccessKeyId:** Your AWS access key ID.
      - **SecretAccessKey:** Your AWS secret access key.
      - **BackupBucketName:** The name of the bucket to store backups in. It should be exclusive for backups made by this instance.
- - **StorageClass**: The desired storage class for your backups. By default it uses standard infrequent access.
-   - **Storj:**
-     - **AccessGrantToken:** Access grant token for the Storj bucket.
-     - **BackupBucketName:** Name of the Storj bucket.
+   - **StorageClass**: The desired storage class for your backups. By default it uses standard infrequent access.
+     - **Storj:**
+       - **AccessGrantToken:** Access grant token for the Storj bucket.
+       - **BackupBucketName:** Name of the Storj bucket.
+ - Optionally configure email notifications using [SendGrid](https://sendgrid.com/):
+   - **Notify**
+      - **MinimumNotifyLevel**: Emails will only be sent if the backup level is at least this level. Options are Sucess, Inconclusive, Failed.
+      - **InconclusiveAfterMinutes**: After this many minutes, the backup will be marked as inconclusive. It will continue to run, but you will be notified as something is likely wrong.
+      - **SendGrid**
+        - **ApiKey**: Your SendGrid API key.
+        - **FromEmail**: Sender. This email or domain should be verified with SendGrid.
+        - **FromName**: The name of the sender.
+        - **ToEmail**: The email address to send the notification to.
 
 ### Setting up the docker-compose.yml file
 
@@ -88,7 +97,13 @@ The only rule is that all volumes to be backed up should be internally mounted s
 ```bash
 # Pull the latest version of the image
 docker pull notcoffee418/coffeebackup
-docker-compose up -d
+
+# It's a good idea to run the first backup with logs so see if everything works ok
+# CTRL+C to exit out when it's done
+docker compose up
+
+# After that, start the container with -d to have it run in the background
+docker compose up -d
 ```
 
 ## Auto-cleaning old backups

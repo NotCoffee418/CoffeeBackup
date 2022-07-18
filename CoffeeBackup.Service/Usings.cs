@@ -12,3 +12,7 @@ global using CoffeeBackup.StorageProviders;
 global using CoffeeBackup.Service.Workers;
 global using CoffeeBackup.StorageProviders.AmazonS3;
 global using CoffeeBackup.StorageProviders.Storj;
+global using CoffeeBackup.Lib.NotificationProviders;
+global using CoffeeBackup.Lib.NotificationProviderRegistrations;
+global using CoffeeBackup.Common.Models;
+global using CoffeeBackup.Lib.Handlers;
