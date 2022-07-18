@@ -33,6 +33,7 @@ public class ArchiveHandler : IArchiveHandler
         if (files.Length == 0)
             throw new Exception("Found no files to back up. Please ensure that the desired backup locations " +
                 "are correcly mounted to the internal /backup/ directory");
+        else _logger.Verbose("Backing up {count} files.", files.Length);
 
         string? archivePath = null;
         try
@@ -55,6 +56,7 @@ public class ArchiveHandler : IArchiveHandler
                 DateTime modificationTime = new FileInfo(sourcePath).LastWriteTimeUtc;
                 try
                 {
+                    _logger.Verbose("Including file: {path}", destPath);
                     using (FileStream fs = File.OpenRead(sourcePath))
                         writer.Write(destPath, fs, modificationTime);
                 }

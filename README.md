@@ -39,21 +39,30 @@ Install [Docker](https://docs.docker.com/get-docker/) and the [Docker Compose](h
 Depending on your needs, you can set up a docker-compose.yml file with environment variables or use an appsettings.json file.  
 For this guide, we'll use an appsettings file.
 
-1. SSH into the server
-2. `nano /etc/coffeebackup/appsettings.json`
-3. Paste in the contents of [appsettings.example.json](https://raw.githubusercontent.com/NotCoffee418/CoffeeBackup/blob/main/appsettings.example.json)
-4. Change settings to your preference:
-    - **BackupIntervalDays:** Amount of days between each backup.
-    - Configure one and only one storage location:
-      - **S3:**
-        - **AccessKeyId:** Your AWS access key ID.
-    - **SecretAccessKey:** Your AWS secret access key.
-    - **BackupBucketName:** The name of the bucket to store backups in. It should be exclusive for backups made by this instance.
-    - **StorageClass**: The desired storage class for your backups. By default it uses standard infrequent access.
-      - **Storj:**
-        - **AccessGrantToken:** Access grant token for the Storj bucket.
-        - **BackupBucketName:** Name of the Storj bucket.
-5. CTRL+X to save and exit out.
+```bash
+# Create & navigate to the config directory
+mkdir /etc/coffeebackup && cd /etc/coffeebackup
+
+# Download the config file
+wget -O appsettings.json https://raw.githubusercontent.com/NotCoffee418/CoffeeBackup/main/appsettings.example.json
+
+# Edit the config file
+nano nano /etc/coffeebackup/appsettings.json
+# CTRL+X to exit out of nano
+```
+
+Change settings to your preference:
+
+ - **BackupIntervalDays:** Amount of days between each backup.
+ - Configure one and only one storage location:
+   - **S3:**
+     - **AccessKeyId:** Your AWS access key ID.
+     - **SecretAccessKey:** Your AWS secret access key.
+     - **BackupBucketName:** The name of the bucket to store backups in. It should be exclusive for backups made by this instance.
+ - **StorageClass**: The desired storage class for your backups. By default it uses standard infrequent access.
+   - **Storj:**
+     - **AccessGrantToken:** Access grant token for the Storj bucket.
+     - **BackupBucketName:** Name of the Storj bucket.
 
 ### Setting up the docker-compose.yml file
 
@@ -61,7 +70,7 @@ This is where the magic happens. We will utilize Docker's volume feature to moun
 
 ```bash
 # Navigate to your home directory, or wherever you want the docker-compose.yml file to be located.
-cd ~
+mkdir ~/coffeebackup && cd ~/coffeebackup
 
 # Download the example docker-compoes file
 wget -O docker-compose.yml https://raw.githubusercontent.com/NotCoffee418/CoffeeBackup/main/docker-compose.example.yml
